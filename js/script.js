@@ -1,35 +1,83 @@
-//Sulla base di queste informazioni dovrà calcolare il prezzo totale del viaggio, secondo queste regole:
 // il prezzo del biglietto è definito in base ai km (0.21 € al km)
 //- va applicato uno sconto del 20% per i minorenni
 // va applicato uno sconto del 40% per gli over 65.
-//- L'output del prezzo finale va messo fuori in forma umana (con massimo due decimali, per indicare centesimi sul prezzo). Questo richiederà un minimo di ricerca.
+//- L'output del prezzo finale va messo fuori in forma umana (con massimo due decimali, per indicare centesimi sul prezzo).
 
-const forKm = 0.21;
+document.addEventListener('DOMContentLoaded', function() {
 
-// num di km che l'utente deve fare
+    // Prendo tutti gli elementi del DOM
+    const formTicket = document.getElementById('ticket-form');
+    const userName = document.getElementById('name');
+    const userKm = document.getElementById('km');
+    const userAge = document.getElementById('scelta');
+    const reset = document.getElementById('resetbtn');
+    const resultName = document.getElementById('name-result');
+    const discount = document.getElementById('offer');
+    const ticketTot = document.getElementById('ticket-cost');
+   // const carrozza = document.getElementById('train');
+   // const cpCode = document.getAnimations.getElementById('code');
 
-const UtenteKm = Number (prompt ('totale km da fare'));
+    // faccio il  calcolo del prezzo
+    function calcoloPrezzo() {
 
-// età dell'utente
+        const nome = userName.value;
+        const km = parseFloat(userKm.value); 
+        const age = userAge.value;
 
-const UtenteAge = Number (prompt('metti la tua età'));
+        // Controllo se i dati siano corrretti
+        if (!nome || isNaN(km) || km <= 0) {
+            alert('Compila correttamente tutti i campi.');
+            return;
+        }
 
-// calcolo totale km
+        //costo tot. per km
+        const prezzoPerKm = 0.21;
+        let prezzo = km * prezzoPerKm;  
 
-let totalCost = Utentekm * forKm;
 
-// Sconto per minorenni 20% and 40% di sconto per gli over 65+
+        // Calcolo sconto in base alla fascia di età
+        let sconto = 0;
+        if (age === 'opt2') {
+            sconto = 0.20;  // 20% per i minorenni
+        } else if (age === 'opt3') {
+            sconto = 0.40;  // 40% per over 65
+        }
 
-let discount = 0;
+        // Applico lo sconto al prezzo
+        prezzo = prezzo * (1 - sconto);
 
-if ( UtenteAge) {
-    discount = totalCost * 0.2;
-} else if (UtenteAge >= 65) {
-    discount = totalCost * 0.4;
-}
+        // numero random carrozza
 
-totalCost = totalCost - discount;
+        //const carrozzaRan = Math.floor(Math.random() * 9) + 1;
 
-console.log(totalCost);
+        // numero random Code
 
-alert('il prezzo totale è: ${totalCost.toFixed(2)}€');
+        //const codes = Math.floor(Math.random () * 95637 ) +1;
+
+        // Mostro i risultati nel biglietto
+        resultName.innerHTML = `<strong>Nome Passeggero</strong>: ${nome}`;
+        discount.innerHTML = `<strong>Offerta</strong>: Biglietto Standard`;
+        ticketTot.innerHTML = `<strong>Costo Biglietto</strong>: €${prezzo.toFixed(2)}`;
+
+        //carrozza.innerHTML = `<strong>Numero Carrozza</strong>: ${carrozzaRan}`;
+        //cpCode.innerHTML = `<strong>CP Codes</strong>: ${codes}`;
+
+    }
+
+    // Aggiungo l'evento al submit del form
+    formTicket.addEventListener('submit', function(event) {
+        event.preventDefault(); 
+        calcoloPrezzo();
+    });
+
+    // Aggiungo l'evento per resettare il form e i risultati
+    reset.addEventListener('click', function() {
+        formTicket.reset();
+
+        // Reset dei risultati nel biglietto
+        resultName.innerHTML = `<strong>Nome Passeggero</strong>: -`;
+        discount.innerHTML = `<strong>Offerta</strong>: -`;
+        ticketTot.innerHTML = `<strong>Costo Biglietto</strong>: -`;
+    });
+
+});
